@@ -1,7 +1,8 @@
-# 水浒英雄传 - 小浣熊水浒卡
+# 水浒英雄传 - 小浣熊水浒卡 ( Water Margin )
 
 [https://linbingquan.github.io/water-margin/](https://linbingquan.github.io/water-margin/)
 
+<div>
 <img src="./imgs/1.jpg" style="width:400px" />
 <img src="./imgs/2.jpg" style="width:400px" />
 <img src="./imgs/3.jpg" style="width:400px" />
@@ -110,3 +111,4 @@
 <img src="./imgs/106.jpg" style="width:400px" />
 <img src="./imgs/107.jpg" style="width:400px" />
 <img src="./imgs/108.jpg" style="width:400px" />
+</div>

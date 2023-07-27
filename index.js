@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import { AmbientLight, PerspectiveCamera, Scene, SRGBColorSpace, TextureLoader, WebGLRenderer } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
@@ -13,14 +13,9 @@ const { innerWidth, innerHeight } = window;
 const width = isMobile ? innerWidth : innerWidth / 2;
 const height = isMobile ? innerHeight / 2 : innerHeight;
 
-const textureLoader = new THREE.TextureLoader();
+const textureLoader = new TextureLoader();
 
-let selectId = 1;
-
-const scene = new THREE.Scene();
-const aspect = width / height;
-const camera = new THREE.PerspectiveCamera(75, aspect);
-const renderer = new THREE.WebGLRenderer({
+const renderer = new WebGLRenderer({
   antialias: true,
   alpha: true,
   preserveDrawingBuffer: true,
@@ -29,21 +24,42 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(width, height);
 container.appendChild(renderer.domElement);
 
-function render() {
-  renderer.render(scene, camera);
-}
+const aspect = width / height;
+const camera = new PerspectiveCamera(50, aspect);
+camera.position.z = 1.5;
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.addEventListener("change", render);
-camera.position.z = 1;
+controls.enableDamping = true;
+controls.addEventListener("change", requestRender);
 
-scene.add(new THREE.AmbientLight());
+const scene = new Scene();
+scene.add(new AmbientLight(0xffffff, 3.14));
 
 const gltfLoader = new GLTFLoader();
 gltfLoader.load("model.gltf", (gltf) => {
   scene.add(gltf.scene);
   render();
 });
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+function animate() {
+  const success = controls.update();
+  render();
+  if (success === false) {
+    renderer.setAnimationLoop(null);
+    isAnimating = false;
+  }
+}
+
+let isAnimating = false;
+function requestRender() {
+  if (isAnimating === true) return;
+  isAnimating = true;
+  renderer.setAnimationLoop(animate);
+}
 
 window.addEventListener("resize", resize);
 
@@ -62,18 +78,24 @@ function renderBySize(options = {}) {
   render();
 }
 
-document.querySelectorAll(".imgs img").forEach((item, index) => {
-  item.addEventListener("click", async () => {
+let selectId = 1;
+const fragment = document.createDocumentFragment();
+for (let index = 1; index <= 108; index++) {
+  const img = document.createElement("img");
+  img.src = `./imgs/${index}.jpg`;
+  img.addEventListener("click", async () => {
+    selectId = index;
     const mesh = scene.getObjectByName("model");
     const material = mesh.material;
-    selectId = index + 1;
     const texture = await textureLoader.loadAsync(`./imgs/${selectId}.jpg`);
     texture.flipY = false;
-    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.colorSpace = SRGBColorSpace;
     material.map = texture;
     render();
   });
-});
+  fragment.appendChild(img);
+}
+document.querySelector(".imgs").appendChild(fragment);
 
 document.querySelector(".button.preview").addEventListener("click", () => {
   container.classList.toggle("hidden");
