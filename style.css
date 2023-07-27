@@ -1,0 +1,93 @@
+:root {
+    color-scheme: light dark;
+}
+
+body {
+    position: relative;
+    margin: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.hidden {
+    display: none;
+}
+
+.app {
+    display: flex;
+}
+
+.app.mobile {
+    flex-direction: column-reverse;
+}
+
+.app .canvas {
+    width: 50vw;
+    height: 100vh;
+}
+
+.app.mobile .container {
+    width: 100vw;
+    height: 50vh;
+}
+
+.app.pc .container {
+    width: 50vw;
+    height: 100vh;
+}
+
+.container {
+    position: sticky;
+    top: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.tools {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.button {
+    padding: 10px;
+    background: #181818;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button svg {
+    color: #8c8c8c;
+}
+
+.button:hover svg {
+    color: #d7d7d7;
+}
+
+.imgs {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s ease-in-out;
+    background: white;
+}
+
+.imgs img {
+    position: sticky;
+    top: 0;
+    width: 400px;
+    transition: all .3s ease-in-out;
+}
+
+.imgs img:hover {
+    cursor: pointer;
+    scale: 1.02;
+}
